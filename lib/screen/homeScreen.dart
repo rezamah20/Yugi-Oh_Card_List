@@ -221,7 +221,7 @@ class _AsyncAutocompleteState extends State<StatefulWidget> {
               hintText: "Search ..",
               hintStyle:TextStyle(color: Colors.white),
               prefixIcon: Padding(
-              padding: EdgeInsets.only(top: 9), // add padding to adjust icon
+              padding: EdgeInsets.only(top: 5), // add padding to adjust icon
               child: Icon(Icons.search, color: Colors.white,),
               ),
             )
