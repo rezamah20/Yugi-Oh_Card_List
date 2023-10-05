@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../api/ApiService.dart';
 import '../model/allcard.dart';
-import '../utils/bottomNavBar.dart';
 import '../utils/size_conf.dart';
 
 class MonsterCard extends StatefulWidget{

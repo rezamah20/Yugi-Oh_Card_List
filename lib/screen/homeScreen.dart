@@ -3,9 +3,6 @@ import '../api/ApiService.dart';
 import '../model/allcard.dart';
 import 'allCard.dart';
 
-const Duration debounceDuration = Duration(milliseconds: 500);
-const Duration fakeAPIDuration = Duration(seconds: 1);
-
 class HomeScreenApp extends StatelessWidget {
   @override
   Widget build(BuildContext context){
@@ -20,12 +17,10 @@ class HomeScreenApp extends StatelessWidget {
 }
 
 class HomeScreen extends StatefulWidget{
-
   HomeScreen({Key? key, required this.title}) :super(key: key);
   final String title;
   @override
   _HomeState createState() => _HomeState();
-
 }
 
 class _HomeState extends State<HomeScreen> {
