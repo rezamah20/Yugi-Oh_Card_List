@@ -26,4 +26,25 @@ class ApiService {
         }
   }
 
+  Future<List<DetailCards>> getDetail(String name) async{
+    final response = await http.get(Uri.parse("$baseUrl?name=$name"));
+    print(response);
+
+    if(response.statusCode == 200){
+      // print(response.body);
+      Iterable it = jsonDecode(response.body)['data'];
+      print(response.body);
+
+      var cards = it.map((card) => DetailCards.fromJson(card)).toList();
+      // const List<Country> countryOptions = <Country>[
+      //   Country(name: 'Africa'),
+      //   Country(name: 'Asia'),
+      // ];
+      //  print(countryOptions);
+      return cards;
+    }else{
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../api/ApiService.dart';
 import '../model/allcard.dart';
 import '../utils/size_conf.dart';
+import 'detailCard.dart';
 
 class AllCard extends StatefulWidget{
   AllCard({Key? key, required this.crd}) :super(key: key);
@@ -24,7 +25,7 @@ class _AllCard extends State<AllCard> {
   void initState() {
     super.initState();
     card = crd;
-    print(crd);
+   // print(crd);
   }
 
   void _reset() {
@@ -59,7 +60,7 @@ class _AllCard extends State<AllCard> {
             child: InkWell(
               borderRadius: BorderRadius.all(Radius.zero),
               onTap: (){
-
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => CardDetailPage(key: UniqueKey(), cardname: card![index].name!),));
               },
               child: Row(
                 children: <Widget>[
