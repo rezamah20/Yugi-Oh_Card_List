@@ -7,18 +7,23 @@ class Cards {
   String? desc;
   int? id;
   List<CardImage>? card_images;
+  List<CardSet>? cardSet;
 
-  Cards({this.name, this.type, this.id, this.card_images, this.desc});
+  Cards({this.name, this.type, this.id, this.card_images, this.desc, this.cardSet});
 
   Cards.fromJson(Map<String, dynamic> json){
         name = json['name'];
         type = json['type'];
         id = json['id'];
         desc = json['desc'];
+
         var list = json['card_images'] as List;
-       //. print(list.runtimeType);
         List<CardImage> imagesList = list.map((i) => CardImage.fromJson(i)).toList();
         card_images = imagesList;
+
+        final carddata = json['card_sets'] as List<dynamic>?;
+        cardSet = carddata?.map((e) => CardSet.fromJson(e as Map<String, dynamic>)).toList();
+
   }
 
   @override
@@ -100,4 +105,59 @@ class DetailCardImage {
         'img_url_small': img_url_small,
         'image_url_cropped': img_url_crop,
       };
+}
+
+class CardSet {
+  String? set_name;
+  String? set_code;
+  String? set_rarity;
+  String? set_rarity_code;
+  String? set_price;
+
+  CardSet({this.set_name, this.set_code, this.set_rarity, this.set_rarity_code, this.set_price});
+
+  CardSet.fromJson(Map<String, dynamic> json){
+    set_name = json['set_name'];
+    set_code = json['set_code'];
+    set_rarity = json['set_rarity'];
+    set_rarity_code = json['set_rarity_code'];
+    set_price = json['set_price'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['set_name'] = this.set_name;
+    data['set_code'] = this.set_code;
+    data['set_rarity'] = this.set_rarity;
+    data['set_rarity_code'] = this.set_rarity_code;
+    data['set_price'] = this.set_price;
+    return data;
+  }
+}
+
+class BannerCard {
+  String? name;
+  String? type;
+  String? desc;
+  int? id;
+  List<CardImage>? card_images;
+
+  BannerCard({this.name, this.type, this.id, this.card_images, this.desc});
+
+  BannerCard.fromJson(Map<String, dynamic> json){
+    name = json['name'];
+    type = json['type'];
+    id = json['id'];
+    desc = json['desc'];
+
+    var list = json['card_images'] as List;
+    List<CardImage> imagesList = list.map((i) => CardImage.fromJson(i)).toList();
+    card_images = imagesList;
+
+  }
+
+  @override
+  String toString() {
+    return name!;
+  }
 }

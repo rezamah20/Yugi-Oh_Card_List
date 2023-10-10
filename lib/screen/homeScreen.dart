@@ -1,7 +1,12 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dots_indicator/dots_indicator.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/screen/bannerCard.dart';
 import '../api/ApiService.dart';
 import '../model/allcard.dart';
 import 'allCard.dart';
+import 'detailCard.dart';
 
 class HomeScreenApp extends StatelessWidget {
   @override
@@ -36,7 +41,9 @@ class _HomeState extends State<HomeScreen> {
   List<Cards> allcard = [];
   List<Cards> monster = [];
   List<Cards> spell = [];
-
+  int currentIndex = 0;
+  bool test = true;
+  Widget? child;
 
   _HomeState() {
     _searchQuery.addListener(() {
@@ -55,62 +62,48 @@ class _HomeState extends State<HomeScreen> {
     });
   }
 
+  void titleselected(){
+    switch (_index) {
+      case 0:
+        test= true;
+        child =  AllCard(crd: card);
+        title = "Yugi-oh Card List";
+        break;
+      case 1:
+        test= false;
+        monster = card
+            .where((Cards cards) => cards.type!.toString().toLowerCase()
+            .contains("monster"))
+            .toList();
+        child = AllCard(key:UniqueKey(), crd: monster);
+        title = "Monster Card";
+        print("Monster Card");
+        break;
+      case 2:
+        test= false;
+        spell = card
+            .where((Cards cards) => cards.type!.toString().toLowerCase()
+            .contains("spell"))
+            .toList();
+        child = AllCard(key:UniqueKey(), crd: spell);
+        title = "Spell Card";
+        print("Spell Card");
+        break;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _IsSearching = false;
-
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget? child;
-    void titleselected(){
-      switch (_index) {
-        case 0:
-          child = AllCard(key: UniqueKey(), crd: card);
-          title = "Yugi-oh Card List";
-          break;
-        case 1:
-          monster = card
-              .where((Cards cards) => cards.type!.toString().toLowerCase()
-              .contains("monster"))
-              .toList();
-          child = AllCard(key:UniqueKey(), crd: monster);
-          title = "Monster Card";
-          print("Monster Card");
-          break;
-        case 2:
-          monster = card
-              .where((Cards cards) => cards.type!.toString().toLowerCase()
-              .contains("spell"))
-              .toList();
-          child = AllCard(key:UniqueKey(), crd: monster);
-          title = "Spell Card";
-          print("Spell Card");
-          break;
-      }
-    }
     return Scaffold(
       appBar: buildBar(context),
       body: SafeArea(
-          child: FutureBuilder<List<Cards>>(
-              future: statesServices.getData(),
-              builder: (BuildContext context, snapshot){
-                if(snapshot.hasData){
-                  card = snapshot.data!;
-                  titleselected();
-                  return SizedBox.expand(child: child);
-                }else if(snapshot.hasError){
-                  print(snapshot.error);
-                  return Text('Error');
-                }
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-          ),
-      ),
+          child: view(test,child)),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (newIndex) {
           setState(() {
@@ -135,6 +128,102 @@ class _HomeState extends State<HomeScreen> {
     );
   }
 
+  Widget view(bool homepage, Widget? child){
+    if(homepage == true){
+      if(card.isEmpty){
+        return FutureBuilder<List<Cards>>(
+            future: statesServices.getData(),
+            builder: (BuildContext context, snapshot){
+              if(snapshot.hasData){
+                card = snapshot.data!;
+                titleselected();
+                return SizedBox.expand(child: Homepage());
+              }else if(snapshot.hasError){
+                print(snapshot.error);
+                return Text('Error');
+              }
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+        );
+      }else{
+        return SizedBox.expand(child: Homepage());
+      }
+     // print("true");
+      //return SizedBox.expand(child: child,);
+    }else{
+     // print("false");
+      return SizedBox.expand(child: child);
+    }
+  }
+  var imgList = [
+    {
+      "url": 'https://images.ygoprodeck.com/images/sets/MP23.jpg',
+      "id": "25th Anniversary Tin: Dueling Heroes Mega Pack"
+    },
+    {
+      "url": 'https://images.ygoprodeck.com/images/sets/WISU.jpg',
+      "id": "Wild Survivors"
+    },
+    {
+      "url": 'https://images.ygoprodeck.com/images/sets/MP22.jpg',
+      "id": "2022 Tin of the Pharaoh's Gods"
+    },
+    {
+      "url": 'https://images.ygoprodeck.com/images/sets/MP20.jpg',
+      "id": "2020 Tin of Lost Memories Mega Pack"
+    },
+  ];
+
+  Widget Homepage(){
+    CarouselController controller = CarouselController();
+    monster = card
+        .where((Cards cards) => cards.type!.toString().toLowerCase()
+        .contains("monster"))
+        .toList();
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: CarouselSlider(
+          carouselController: controller,
+          items: imgList.map((i) {
+            return Builder(
+              builder: (BuildContext context) {
+                return Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.symmetric(horizontal: 5.0),
+                    decoration: BoxDecoration(color: Colors.amber),
+                    child: GestureDetector(
+                        child: Image.network(i["url"]!, fit: BoxFit.fill),
+                        onTap: () {
+                         Navigator.of(context).push(MaterialPageRoute(builder: (context) => BannerCardItem(title: i['id']!)));
+                        }));
+                    },
+                );
+              }).toList(), options: CarouselOptions(autoPlay: true,
+              onPageChanged: (index, reason){
+                setState(() {
+                  currentIndex = index;
+                  print(currentIndex);
+                });
+              },
+              enlargeCenterPage: true,
+              viewportFraction: 1,
+              aspectRatio: 0.8,
+              initialPage: 2,),
+            ),
+        ),
+        DotsIndicator(dotsCount: imgList.length, position: currentIndex.toDouble()),
+        Align(alignment: Alignment.centerLeft, child: Container(padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),child: const Text("All Card", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),)),
+        Expanded(
+          child: AllCard(crd: card),
+        ),
+      ],
+    );
+  }
+  
+  
   PreferredSizeWidget buildBar(BuildContext context) {
     return AppBar(
         centerTitle: true,
@@ -202,7 +291,7 @@ class _AsyncAutocompleteState extends State<StatefulWidget> {
             .toList();
       },
       onSelected: (Cards selection) {
-        debugPrint('You just selected $selection');
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => CardDetailPage(key: UniqueKey(), cardname: selection.toString(),)));
       },
       fieldViewBuilder: ((context,
           textEditingController,

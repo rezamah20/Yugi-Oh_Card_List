@@ -67,14 +67,6 @@ class _CardDetailPageState extends State<CardDetailPage> {
         // Type
         TypeContainer(),
         DescContainer()
-        // Race
-        // spellRaceContainer(),
-        // Archetype
-        // spellArcheContainer(),
-        // Desc
-        // descContainer(),
-        // Sets
-        // setsContainer(),
       ],
     );
   }
