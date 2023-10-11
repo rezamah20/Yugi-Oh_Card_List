@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
-
 import '../model/allcard.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,19 +23,12 @@ class ApiService {
 
   Future<List<DetailCards>> getDetail(String name) async{
     final response = await http.get(Uri.parse("$baseUrl?name=$name"));
-    print(response);
 
     if(response.statusCode == 200){
-      // print(response.body);
       Iterable it = jsonDecode(response.body)['data'];
-      print(response.body);
 
       var cards = it.map((card) => DetailCards.fromJson(card)).toList();
-      // const List<Country> countryOptions = <Country>[
-      //   Country(name: 'Africa'),
-      //   Country(name: 'Asia'),
-      // ];
-      //  print(countryOptions);
+
       return cards;
     }else{
       throw Exception('Failed to load jobs from API');
@@ -46,12 +37,10 @@ class ApiService {
 
   Future<List<BannerCard>> getBannerCard(String name) async{
     final response = await http.get(Uri.parse("$baseUrl?cardset=$name"));
-    print(response);
 
     if(response.statusCode == 200){
 
       Iterable it = jsonDecode(response.body)['data'];
-      print(response.body);
       var cards = it.map((card) => BannerCard.fromJson(card)).toList();
 
       return cards;
