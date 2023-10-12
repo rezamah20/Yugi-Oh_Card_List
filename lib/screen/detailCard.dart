@@ -4,28 +4,13 @@ import 'package:flutter_app/model/allcard.dart';
 import '../api/ApiService.dart';
 import '../utils/size_conf.dart';
 
-class CardDetailPage extends StatefulWidget {
-  final String cardname;
 
-  CardDetailPage({Key? key, required this.cardname}) : super(key: key);
-
-  @override
-  _CardDetailPageState createState() => _CardDetailPageState(cardname: cardname, key: UniqueKey());
-}
-
-class _CardDetailPageState extends State<CardDetailPage> {
-  _CardDetailPageState({Key? key, required this.cardname});
+class CardDetailPage extends StatelessWidget {
+  CardDetailPage({Key? key, required this.cardname});
 
   final String cardname;
-
-
-  ApiService statesServices = ApiService();
-  List<DetailCards> card = [];
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  final ApiService statesServices = ApiService();
+  late List<DetailCards> card = [];
 
   @override
   Widget build(BuildContext context) {

@@ -4,23 +4,12 @@ import '../model/allcard.dart';
 import '../utils/size_conf.dart';
 import 'detailCard.dart';
 
-class AllCard extends StatefulWidget{
-  const AllCard({Key? key, required this.crd}) :super(key: key);
-  final List<Cards> crd;
-  @override
-  _AllCard createState() => _AllCard(key: UniqueKey() ,card: crd);
-}
 
-class _AllCard extends State<AllCard> {
-  _AllCard({this.key, required this.card});
-  final Key? key;
-  ApiService statesServices = ApiService();
+class AllCard extends StatelessWidget {
+  AllCard({this.key, required this.card});
+  late final Key? key;
+  final ApiService statesServices = ApiService();
   late final List<Cards> card;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +43,9 @@ class _AllCard extends State<AllCard> {
                     height: 200,
                   ),
                   Container(
-                    height: SizeConfig.blockSizeVertical! * 20,
-                    width: SizeConfig.blockSizeHorizontal! * 60,
-                    padding: EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
+                    height: SizeConfig.blockSizeVertical! * 25,
+                    width: SizeConfig.blockSizeHorizontal! * 50,
+                    padding: EdgeInsets.only(left: 8, right: 0, top: 0, bottom: 0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.max,

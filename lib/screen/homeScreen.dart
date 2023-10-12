@@ -25,7 +25,8 @@ class HomeScreen extends StatefulWidget{
   HomeScreen({Key? key, required this.title}) :super(key: key);
   final String title;
   @override
-  _HomeState createState() => _HomeState();
+  _HomeState createState() => _HomeState(title: title);
+
 }
 
 class _HomeState extends State<HomeScreen> {
@@ -45,7 +46,7 @@ class _HomeState extends State<HomeScreen> {
   bool test = true;
   Widget? child;
 
-  _HomeState() {
+  _HomeState({Key? key, required this.title}) {
     _searchQuery.addListener(() {
       if (_searchQuery.text.isEmpty) {
         setState(() {
@@ -66,7 +67,7 @@ class _HomeState extends State<HomeScreen> {
     switch (_index) {
       case 0:
         test= true;
-        child =  AllCard(crd: card);
+        child =  AllCard(card: card);
         title = "Yugi-oh Card List";
         break;
       case 1:
@@ -75,7 +76,7 @@ class _HomeState extends State<HomeScreen> {
             .where((Cards cards) => cards.type!.toString().toLowerCase()
             .contains("monster"))
             .toList();
-        child = AllCard(key:UniqueKey(), crd: monster);
+        child = AllCard(key:UniqueKey(), card: monster);
         title = "Monster Card";
         print("Monster Card");
         break;
@@ -85,7 +86,7 @@ class _HomeState extends State<HomeScreen> {
             .where((Cards cards) => cards.type!.toString().toLowerCase()
             .contains("spell"))
             .toList();
-        child = AllCard(key:UniqueKey(), crd: spell);
+        child = AllCard(key:UniqueKey(), card: spell);
         title = "Spell Card";
         print("Spell Card");
         break;
@@ -115,13 +116,19 @@ class _HomeState extends State<HomeScreen> {
         currentIndex: _index,
         items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.call),
+              icon: Icon(Icons.scatter_plot_outlined),
               label: "All Card"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.looks_two),
+              icon: ImageIcon(
+                AssetImage("assets/images/icon_spell.png"),
+                color: Color(0xFFD5A90D),
+              ),
               label: "Monster Card"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.looks_3),
+              icon: ImageIcon(
+                AssetImage("assets/images/icon_spell.png"),
+                color: Color(0xFF346E3D),
+              ),
               label: "Spell Card"),
         ],
       ),
@@ -217,7 +224,7 @@ class _HomeState extends State<HomeScreen> {
         DotsIndicator(dotsCount: imgList.length, position: currentIndex.toDouble()),
         Align(alignment: Alignment.centerLeft, child: Container(padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),child: const Text("All Card", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),)),
         Expanded(
-          child: AllCard(crd: card),
+          child: AllCard(card: card),
         ),
       ],
     );
@@ -262,21 +269,9 @@ class _HomeState extends State<HomeScreen> {
   }
 }
 
-class _AsyncAutocomplete extends StatefulWidget {
-  _AsyncAutocomplete({Key? key, required this.card}) :super(key: key);
-  final List<Cards> card;
-
-  @override
-  _AsyncAutocompleteState createState() => _AsyncAutocompleteState(card: card);
-}
-
-class _AsyncAutocompleteState extends State<StatefulWidget> {
-  _AsyncAutocompleteState({required this.card});
-  final List<Cards> card;
-  @override
-  void initState() {
-    super.initState();
-  }
+class _AsyncAutocomplete extends StatelessWidget  {
+  _AsyncAutocomplete({required this.card});
+  late final List<Cards> card;
 
   @override
   Widget build(BuildContext context) {
